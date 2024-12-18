@@ -1,18 +1,10 @@
+USE School;
 
-IF OBJECT_ID('course') IS NOT NULL
-BEGIN
-	DROP TABLE course
-END
+DROP TABLE IF EXISTS course;
 
-IF OBJECT_ID('student') IS NOT NULL
-BEGIN
-	DROP TABLE student
-END
+DROP TABLE IF EXISTS student;
 
-IF OBJECT_ID('#assignment') IS NOT NULL
-BEGIN
-	DROP TABLE assignment
-END
+DROP TABLE IF EXISTS assignment;
 
 CREATE TABLE course (
     id          INT         NOT NULL PRIMARY KEY,
@@ -34,7 +26,7 @@ CREATE TABLE assignment (
     course_id       INT         NOT NULL,
     student_id      INT         NOT NULL,
 )
-
+-- could also use TRUNCATE TABLE instead of DROP / CREATE
 INSERT INTO course (id,course_name) 
 VALUES (1,'Math'),
        (2,'Science'),
@@ -49,14 +41,16 @@ VALUES (1,'Joe','Bobby'),
 	   (5,'Mary','Poppins'),
 	   (6,'Bell','Tinker')
 
+DECLARE @today DATETIME = GETDATE();
+
 INSERT INTO assignment (id,assignment_name,due_date,submit_date,grade,course_id,student_id)
-VALUES (1,'math 1',GETDATE(),DATEADD(DAY, +30, GETDATE()),40,1,1),
-	   (2,'math 2',GETDATE(),DATEADD(DAY, +11, GETDATE()),50,1,2),
-	   (3,'science 1',GETDATE(),DATEADD(DAY, -1, GETDATE()),60,2,3),
-	   (4,'science 2',GETDATE(),DATEADD(DAY, -1, GETDATE()),70,2,4),
-	   (5,'social studies 1',GETDATE(),DATEADD(DAY, +15, GETDATE()),80,3,5),
-	   (6,'social studies 2',GETDATE(),DATEADD(DAY, +9, GETDATE()),90,3,6),
-	   (7,'english 1',GETDATE(),DATEADD(DAY, +5, GETDATE()),100,4,3),
-	   (8,'english 2',GETDATE(),DATEADD(DAY, +50, GETDATE()),85,4,6)
+VALUES (1,'math 1',           @today, DATEADD(DAY, +30, @today),  40, 1, 1),
+	   (2,'math 2',           @today, DATEADD(DAY, +11, @today),  50, 1, 2),
+	   (3,'science 1',        @today, DATEADD(DAY,  -1, @today),  60, 2, 3),
+	   (4,'science 2',        @today, DATEADD(DAY,  -1, @today),  80, 2, 4),
+	   (5,'social studies 1', @today, DATEADD(DAY, +15, @today),  65, 3, 5),
+	   (6,'social studies 2', @today, DATEADD(DAY,  +9, @today),  90, 3, 6),
+	   (7,'english 1',        @today, DATEADD(DAY,  +5, @today), 100, 4, 3),
+	   (8,'english 2',        @today, DATEADD(DAY, +50, @today),  85, 4, 6)
 
 
